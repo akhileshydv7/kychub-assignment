@@ -7,3 +7,12 @@ div{
     margin: 0;
     line-height: normal;
 }
+
+.ant-modal-root .ant-modal-wrap {
+    overflow:unset !important;
+
+}
+
+.ant-modal .ant-modal-content{
+    height: 95vh !important;
+}

@@ -161,7 +161,7 @@ const ProductModal = ({ setIsModalOpen, isModalOpen }: any) => {
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <div style={{ height: "95vh", overflowY: "auto" }}>
+        <div style={{ height: "80vh", overflowY: "auto" }}>
           <ProductTable setIsModalOpen={setIsModalOpen} isModal={true} />
         </div>
       </Modal>

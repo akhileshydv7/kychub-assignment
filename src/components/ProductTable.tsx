@@ -4,8 +4,7 @@ import { Button, Flex, Pagination, Table, message } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { addProduct } from "../assets/redux/productSlice.js";
-
+import { addProduct, removeProduct } from "../assets/redux/productSlice.js";
 
 const ProductTable = ({
   isModal = false,
@@ -14,7 +13,7 @@ const ProductTable = ({
   isModal?: boolean;
   setIsModalOpen?: any;
 }) => {
-  const productData = useSelector((store:any) => store.products.products);
+  const productData = useSelector((store: any) => store.products.products);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,11 +22,11 @@ const ProductTable = ({
   const dispatch = useDispatch();
 
   const itemsPerPage = 10;
-  
+
   const [_, contextHolder] = message.useMessage();
   message.config({
-    maxCount:2
-  })
+    maxCount: 2,
+  });
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -54,23 +53,27 @@ const ProductTable = ({
   ];
 
   const rowSelection = {
-    selectedRowKeys: productData?.map((e:any) => e?.id),
-    onChange: (_newSelectedRowKeys:any, selectedRows:any) => {
-      if(selectedRows?.length === 1){
+    selectedRowKeys: productData?.map((e: any) => e?.id),
+    onSelect: (record: any, selected: any, selectedRows: any) => {
+      if (selectedRows?.length === 1) {
         message.warning("Please select 1 more item to compare.");
       }
-      if(selectedRows?.length > 4){
+      if (selectedRows?.length > 4) {
         message.warning("You can only select up to 4 products for comparison.");
       }
       if (selectedRows.length <= 4) {
-        dispatch(addProduct(selectedRows));
+        if (selected) {
+          dispatch(addProduct(selectedRows));
+        } else {
+          dispatch(removeProduct(record?.id));
+        }
       }
     },
   };
 
   const hasSelected = productData.length > 1 && productData.length <= 4;
 
-  const handlePageChange = (page:any) => {
+  const handlePageChange = (page: any) => {
     setCurrentPage(page);
   };
 
@@ -83,47 +86,47 @@ const ProductTable = ({
   };
 
   return (
-    <>
-    <Flex gap="20px" vertical>
-      <Flex align="center" justify="space-between" gap="15px">
-        {hasSelected ? `${productData.length} products selected` : <div/>}
-        <Button
-          onClick={handleCompare}
-          type="primary"
-          disabled={!hasSelected}
-          loading={loading}
-        >
-          Compare
-        </Button>
-      </Flex>
+    <div style={{ overflow: "auto", height: "100%" }}>
+      <Flex gap="20px" vertical>
+        <Flex align="center" justify="space-between" gap="15px">
+          {hasSelected ? `${productData.length} products selected` : <div />}
+          <Button
+            onClick={handleCompare}
+            type="primary"
+            disabled={!hasSelected}
+            loading={loading}
+          >
+            Compare
+          </Button>
+        </Flex>
 
-      <Table
-        rowSelection={rowSelection}
-        columns={columns}
-        dataSource={products}
-        loading={loading}
-        pagination={false}
-        rowKey="id"
-        size="small"
-      />
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Pagination
-          current={currentPage}
-          total={totalProducts}
-          pageSize={itemsPerPage}
-          onChange={handlePageChange}
-          showSizeChanger={false}
+        <Table
+          rowSelection={rowSelection}
+          columns={columns}
+          dataSource={products}
+          loading={loading}
+          pagination={false}
+          rowKey="id"
+          size="small"
         />
-      </div>
-    </Flex>
-    {contextHolder}
-    </>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Pagination
+            current={currentPage}
+            total={totalProducts}
+            pageSize={itemsPerPage}
+            onChange={handlePageChange}
+            showSizeChanger={false}
+          />
+        </div>
+      </Flex>
+      {contextHolder}
+    </div>
   );
 };
 

@@ -11,7 +11,7 @@ function App() {
     <Provider store={appStore}>
       <Router>
         <Routes>
-          <Route path="/" element={<AppLayout />} >
+          <Route path="/" element={<AppLayout />}>
             <Route index element={<ProductDetails />} />
             <Route path="compare" element={<CompareProducts />} />
           </Route>
