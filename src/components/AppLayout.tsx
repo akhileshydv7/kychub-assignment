@@ -16,7 +16,7 @@ const AppLayout = () => {
             key: 'compare', label: "Compare Products", onClick: () => {
                 if (productData?.length > 1) {
                     navigate("/compare")
-                }else message.warning("Please select 1 more item to compare.")
+                }else message.warning("Please select at least 2 products to compare")
             }
         },
     ]
