@@ -24,7 +24,7 @@ const ProductTable = ({
 
   const itemsPerPage = 10;
   
-  const [messageApi, contextHolder] = message.useMessage();
+  const [_, contextHolder] = message.useMessage();
   message.config({
     maxCount:2
   })
